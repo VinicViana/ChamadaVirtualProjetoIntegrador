@@ -15,6 +15,8 @@ namespace ChamadaVirtual.MVC.Models
         public string Matricula { get; set; }
         [Required(ErrorMessage = "Campo obigatório")]
         public int TurmaId { get; set; }
+        public int GrupoId { get; set; }
         public Turma oTurma { get; set; }
+        public Grupo oGrupo { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace ChamadaVirtual.MVC.Controllers
     public class TurmasController : Controller
     {
         private readonly Context _context;
-
+        Aluno oAluno;
         public TurmasController(Context context)
         {
             _context = context;
@@ -62,6 +62,19 @@ namespace ChamadaVirtual.MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(turma);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmarPresencaAluno(int id,ControlePresenca controlePresenca)
+        {
+            if (ModelState.IsValid)
+            {
+                controlePresenca.AlunoId = id;
+                controlePresenca.DataPresenca = DateTime.Now;
+                _context.controlePresenca.Add(controlePresenca);
+                await _context.SaveChangesAsync();
+            }
+            return View();
         }
 
         // GET: Turmas/Edit/5
@@ -147,6 +160,13 @@ namespace ChamadaVirtual.MVC.Controllers
         private bool TurmaExists(int id)
         {
             return _context.turma.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> Visualizar(int id)
+        {
+            var context = _context.aluno.Include(a => a.oTurma);
+            
+            return View(context.Where(i => i.TurmaId == id));
         }
     }
 }

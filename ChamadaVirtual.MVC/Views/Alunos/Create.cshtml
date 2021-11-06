@@ -1,7 +1,7 @@
 ﻿@model ChamadaVirtual.MVC.Models.Aluno
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Novo aluno";
 }
 
 <h1>Novo aluno</h1>
@@ -22,8 +22,12 @@
                 <span asp-validation-for="Matricula" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TurmaId" class="control-label"></label>
-                <select asp-for="TurmaId" class ="form-control" asp-items="ViewBag.TurmaId"></select>
+                <label class="control-label">Turma</label>
+                <select asp-for="TurmaId" class="form-control" asp-items="ViewBag.TurmaId"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Grupo</label>
+                <select asp-for="GrupoId" class="form-control" asp-items="ViewBag.GrupoId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Cadastrar" class="btn btn-primary" />

@@ -11,7 +11,6 @@ namespace ChamadaVirtual.MVC.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "Campo obigatório")]
         public string Descricao { get; set; }
-        [Required(ErrorMessage = "Campo obigatório")]
         public List<Aluno> ListAlunos  { get; set; }
     }
 }

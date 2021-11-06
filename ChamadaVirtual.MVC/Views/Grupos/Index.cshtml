@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ChamadaVirtual.MVC.Models.Grupo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Grupos</h1>
+
+<p>
+    <a class="btn btn-success" asp-action="Create">Novo grupo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nome do grupo
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomeGrupo)
+            </td>
+            <td>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                <a class="btn btn-secondary" asp-action="Visualizar" asp-route-id="@item.Id">Visualizar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

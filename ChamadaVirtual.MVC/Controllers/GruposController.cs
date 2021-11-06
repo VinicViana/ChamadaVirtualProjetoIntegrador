@@ -7,25 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ChamadaVirtual.MVC.Models;
 
-namespace ChamadaVirtual.MVC.Controllers
+namespace ChamadaVirtual.MVC.Views
 {
-    public class AlunosController : Controller
+    public class GruposController : Controller
     {
         private readonly Context _context;
 
-        public AlunosController(Context context)
+        public GruposController(Context context)
         {
             _context = context;
         }
 
-        // GET: Alunos
+        // GET: Grupos
         public async Task<IActionResult> Index()
         {
-            var context = _context.aluno.Include(a => a.oTurma);
-            return View(await context.ToListAsync());
+            return View(await _context.grupo.ToListAsync());
         }
 
-        // GET: Alunos/Details/5
+        // GET: Grupos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,44 +32,39 @@ namespace ChamadaVirtual.MVC.Controllers
                 return NotFound();
             }
 
-            var aluno = await _context.aluno
-                .Include(a => a.oTurma)
+            var grupo = await _context.grupo
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (aluno == null)
+            if (grupo == null)
             {
                 return NotFound();
             }
 
-            return View(aluno);
+            return View(grupo);
         }
 
-        // GET: Alunos/Create
+        // GET: Grupos/Create
         public IActionResult Create()
         {
-            ViewData["TurmaId"] = new SelectList(_context.turma, "Id", "Descricao");
-            ViewData["GrupoId"] = new SelectList(_context.grupo, "Id", "NomeGrupo");
             return View();
         }
 
-        // POST: Alunos/Create
+        // POST: Grupos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Matricula,TurmaId, GrupoId")] Aluno aluno)
+        public async Task<IActionResult> Create([Bind("Id,NomeGrupo")] Grupo grupo)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(aluno);
+                _context.Add(grupo);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TurmaId"] = new SelectList(_context.turma, "Id", "Descricao", aluno.TurmaId);
-            ViewData["GrupoId"] = new SelectList(_context.grupo, "Id", "NomeGrupo", aluno.GrupoId);
-            return View(aluno);
+            return View(grupo);
         }
 
-        // GET: Alunos/Edit/5
+        // GET: Grupos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,24 +72,22 @@ namespace ChamadaVirtual.MVC.Controllers
                 return NotFound();
             }
 
-            var aluno = await _context.aluno.FindAsync(id);
-            if (aluno == null)
+            var grupo = await _context.grupo.FindAsync(id);
+            if (grupo == null)
             {
                 return NotFound();
             }
-            ViewData["TurmaId"] = new SelectList(_context.turma, "Id", "Descricao", aluno.TurmaId);
-            ViewData["GrupoId"] = new SelectList(_context.grupo, "Id", "NomeGrupo", aluno.GrupoId);
-            return View(aluno);
+            return View(grupo);
         }
 
-        // POST: Alunos/Edit/5
+        // POST: Grupos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Matricula,TurmaId, GrupoId")] Aluno aluno)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeGrupo")] Grupo grupo)
         {
-            if (id != aluno.Id)
+            if (id != grupo.Id)
             {
                 return NotFound();
             }
@@ -104,12 +96,12 @@ namespace ChamadaVirtual.MVC.Controllers
             {
                 try
                 {
-                    _context.Update(aluno);
+                    _context.Update(grupo);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AlunoExists(aluno.Id))
+                    if (!GrupoExists(grupo.Id))
                     {
                         return NotFound();
                     }
@@ -120,12 +112,10 @@ namespace ChamadaVirtual.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TurmaId"] = new SelectList(_context.turma, "Id", "Descricao", aluno.TurmaId);
-            ViewData["TurmaId"] = new SelectList(_context.turma, "Id", "NomeGrupo", aluno.GrupoId);
-            return View(aluno);
+            return View(grupo);
         }
 
-        // GET: Alunos/Delete/5
+        // GET: Grupos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -133,31 +123,37 @@ namespace ChamadaVirtual.MVC.Controllers
                 return NotFound();
             }
 
-            var aluno = await _context.aluno
-                .Include(a => a.oTurma)
+            var grupo = await _context.grupo
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (aluno == null)
+            if (grupo == null)
             {
                 return NotFound();
             }
 
-            return View(aluno);
+            return View(grupo);
         }
 
-        // POST: Alunos/Delete/5
+        // POST: Grupos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var aluno = await _context.aluno.FindAsync(id);
-            _context.aluno.Remove(aluno);
+            var grupo = await _context.grupo.FindAsync(id);
+            _context.grupo.Remove(grupo);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AlunoExists(int id)
+        private bool GrupoExists(int id)
         {
-            return _context.aluno.Any(e => e.Id == id);
+            return _context.grupo.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> Visualizar(int id)
+        {
+            var context = _context.aluno.Include(a => a.oGrupo);
+
+            return View(context.Where(i => i.GrupoId == id));
         }
     }
 }
